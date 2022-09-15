@@ -1,0 +1,158 @@
+// theme colors
+$blue: #8cb7fc;
+$gray: #818588;
+$light-gray: #bdc1c6;
+$dark-gray: #656568;
+$textarea-color: #303134;
+$background-color: #23252a;
+
+// typography
+$font-size: 14px;
+
+* {
+	font-family: arial, sans-serif;
+}
+
+body {
+	margin: 0;
+	display: flex;
+	height: 100vh;
+	justify-content: center;
+	align-items: center;
+	background-color: $background-color;
+}
+
+.app {
+	display: flex;
+	justify-content: center;
+	height: 360px;
+}
+
+.output,
+.input {
+	display: flex;
+	flex-direction: column;
+	width: 300px;
+
+	& textarea {
+		background-color: $textarea-color;
+	}
+}
+
+.input {
+	.icon-button {
+		@extend .clickable;
+		position: relative;
+		width: max-content;
+		height: max-content;
+		padding: 0 6px;
+		font-size: 2.5 * $font-size;
+		color: $light-gray;
+
+		svg {
+			fill: $dark-gray;
+			&:hover {
+				fill: $light-gray;
+			}
+		}
+	}
+
+	.delete {
+		left: 260px;
+		top: -132px;
+	}
+
+	.microphone {
+		left: 10px;
+		top: -90px;
+	}
+
+	.microphone-rec {
+		svg {
+			fill: rgba(255, 0, 0, 0.8);
+			transition: fill 300ms;
+			animation: recording 2s ease-out infinite normal;
+
+			&:hover {
+				fill: $background-color;
+			}
+		}
+	}
+}
+
+@keyframes recording {
+	0% {
+		fill: rgba(255, 0, 0, 0.7);
+	}
+
+	15% {
+		fill: rgba(255, 0, 0, 0.9);
+	}
+
+	60% {
+		fill: rgba(255, 0, 0, 0.4);
+	}
+
+	100% {
+		fill: rgba(255, 0, 0, 0.7);
+	}
+}
+
+textarea {
+	background-color: transparent;
+	color: $light-gray;
+	box-sizing: border-box;
+	border: none;
+	resize: none;
+	padding: 16px;
+	width: 280px;
+	height: 146px;
+	border-radius: 10px;
+	margin-top: 10px;
+	outline: none;
+	overflow: auto;
+	font-size: 1.6 * $font-size;
+}
+
+.arrow-container {
+	width: 26px;
+	height: 26px;
+	padding: 8px 16px;
+	@extend .clickable;
+
+	svg {
+		fill: $dark-gray;
+	}
+}
+
+input {
+	height: 40px;
+	width: 100%;
+	border: 1px solid $gray;
+	border-radius: 8px;
+	color: $light-gray;
+	font-size: $font-size;
+	box-sizing: border-box;
+	background-color: transparent;
+}
+
+.button-container {
+	color: $light-gray;
+	padding: 12px 16px;
+	height: 20px;
+}
+
+.label-box {
+	margin-bottom: 18px;
+
+	input {
+		color: $blue;
+		padding: 8px 16px;
+		font-size: $font-size;
+		outline: none;
+	}
+}
+
+.clickable {
+	cursor: pointer;
+}
