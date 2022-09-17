@@ -1,6 +1,7 @@
 import { useState } from "react";
 import LabelBox from "./LabelBox";
 import Microphone from "./svg/Microphone";
+import { languages } from "../data/languages";
 
 const TextBox = ({
 	type,
@@ -23,13 +24,18 @@ const TextBox = ({
 		setRecording(!recording);
 	};
 
+	const getPlaceholderText = () => {
+		const currentLanguage = languages.find((lang) => lang.code === selectedLanguage.code);
+		return type === "input" ? currentLanguage.enterText : currentLanguage.translation;
+	};
+
 	return (
 		<div className={type}>
-			<LabelBox style={type} selectedLanguage={selectedLanguage} />
+			<LabelBox className={type} selectedLanguage={selectedLanguage.title} />
 			<textarea
 				className={type}
 				disabled={type === "output"}
-				placeholder={type === "input" ? "Enter text" : "Translation"}
+				placeholder={getPlaceholderText()}
 				onChange={(e) => setTextToTranslate(e.target.value)}
 				value={type === "input" ? textToTranslate : translatedText}
 			/>

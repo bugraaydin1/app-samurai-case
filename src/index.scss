@@ -200,19 +200,6 @@ input {
 	background-color: transparent;
 }
 
-.button-container {
-	color: $dark-gray;
-	padding: 12px 16px;
-	height: 20px;
-
-	@include media("xs", "sm") {
-		position: absolute;
-		height: 32px;
-		font-size: 2 * $font-size;
-		left: calc(50% + 100px);
-	}
-}
-
 .label-box {
 	margin-bottom: 18px;
 
