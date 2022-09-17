@@ -1,13 +1,36 @@
 // theme colors
 $blue: #8cb7fc;
-$gray: #818588;
+$gray: #aeb3b6;
 $light-gray: #bdc1c6;
-$dark-gray: #656568;
-$textarea-color: #303134;
-$background-color: #23252a;
+$dark-gray: #7b7b7f;
+$red: #d5282800;
+
+$textarea-color: #e2e6f2;
+$background-color: #efefef;
+$dark-background-color: #23252a;
 
 // typography
 $font-size: 14px;
+
+// breakpoints
+$breakpoints: (
+	"xs": 0,
+	"sm": 768px,
+	"md": 992px,
+	"lg": 1024px,
+	"xl": 1800px,
+);
+
+// mixins
+@mixin media($bp1, $bp2: "xl") {
+	@if map-has-key($breakpoints, $bp1) and map-has-key($breakpoints, $bp2) {
+		@media (min-width: map-get($breakpoints, $bp1)) and (max-width: map-get($breakpoints, $bp2)) {
+			@content;
+		}
+	} @else {
+		@warn ("breakpoint key not found: `#{$bp1}` or `#{$bp2}`");
+	}
+}
 
 * {
 	font-family: arial, sans-serif;
@@ -26,6 +49,14 @@ body {
 	display: flex;
 	justify-content: center;
 	height: 360px;
+
+	@include media("xs", "sm") {
+		flex-direction: column;
+		align-items: center;
+	}
+
+	@include media("sm") {
+	}
 }
 
 .output,
@@ -36,6 +67,38 @@ body {
 
 	& textarea {
 		background-color: $textarea-color;
+		@include media("md") {
+			margin: 20px 0 0;
+		}
+	}
+}
+
+textarea {
+	background-color: transparent;
+	color: $dark-gray;
+	box-sizing: border-box;
+	border: none;
+	resize: none;
+	padding: 16px;
+	width: 280px;
+	height: 160px;
+	border-radius: 10px;
+	margin-top: 10px;
+	outline: none;
+	overflow: auto;
+	font-size: 1.6 * $font-size;
+
+	&::placeholder {
+		color: $dark-gray;
+	}
+
+	@include media("xs", "lg") {
+		height: 146px;
+		font-size: 1.2 * $font-size;
+	}
+
+	@include media("xs", "sm") {
+		font-size: 1.2 * $font-size;
 	}
 }
 
@@ -60,6 +123,10 @@ body {
 	.delete {
 		left: 260px;
 		top: -132px;
+
+		@include media("lg") {
+			top: -142px;
+		}
 	}
 
 	.microphone {
@@ -69,7 +136,7 @@ body {
 
 	.microphone-rec {
 		svg {
-			fill: rgba(255, 0, 0, 0.8);
+			fill: rgba($red, 0.8);
 			transition: fill 300ms;
 			animation: recording 2s ease-out infinite normal;
 
@@ -82,36 +149,20 @@ body {
 
 @keyframes recording {
 	0% {
-		fill: rgba(255, 0, 0, 0.7);
+		fill: rgba($red, 0.7);
 	}
 
 	15% {
-		fill: rgba(255, 0, 0, 0.9);
+		fill: rgba($red, 0.9);
 	}
 
 	60% {
-		fill: rgba(255, 0, 0, 0.4);
+		fill: rgba($red, 0.4);
 	}
 
 	100% {
-		fill: rgba(255, 0, 0, 0.7);
+		fill: rgba($red, 0.7);
 	}
-}
-
-textarea {
-	background-color: transparent;
-	color: $light-gray;
-	box-sizing: border-box;
-	border: none;
-	resize: none;
-	padding: 16px;
-	width: 280px;
-	height: 146px;
-	border-radius: 10px;
-	margin-top: 10px;
-	outline: none;
-	overflow: auto;
-	font-size: 1.6 * $font-size;
 }
 
 .arrow-container {
@@ -122,6 +173,19 @@ textarea {
 
 	svg {
 		fill: $dark-gray;
+	}
+
+	@include media("xs", "sm") {
+		position: relative;
+		bottom: 41px;
+		> svg {
+			width: 2 * $font-size;
+			height: 2 * $font-size;
+		}
+	}
+
+	@include media("md") {
+		margin: 0 20px;
 	}
 }
 
@@ -137,9 +201,16 @@ input {
 }
 
 .button-container {
-	color: $light-gray;
+	color: $dark-gray;
 	padding: 12px 16px;
 	height: 20px;
+
+	@include media("xs", "sm") {
+		position: absolute;
+		height: 32px;
+		font-size: 2 * $font-size;
+		left: calc(50% + 100px);
+	}
 }
 
 .label-box {
