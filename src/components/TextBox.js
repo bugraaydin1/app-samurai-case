@@ -19,8 +19,41 @@ const TextBox = ({
 		setTranslatedText("");
 	};
 
-	const handleRecord = () => {
-		console.log("start recording!");
+	const handleSpeechRecognition = () => {
+		const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+		if (SpeechRecognition !== undefined) {
+			let recognition = new SpeechRecognition();
+
+			recognition.continuous = false;
+			recognition.lang = selectedLanguage.code;
+			recognition.interimResults = true;
+			recognition.maxAlternatives = 1;
+
+			recognition.start();
+
+			recognition.onspeechend = () => {
+				setRecording(false);
+				recognition.stop();
+			};
+
+			recognition.onresult = (result) => {
+				const resolved = result.results[0][0];
+				const accuracy = Math.floor(resolved.confidence * 100);
+
+				console.log(`${accuracy}% accurate: ${resolved.transcript}`);
+
+				setTextToTranslate(resolved.transcript.toLowerCase());
+			};
+		} else {
+			console.warn("Speech recognition is not supported ❎");
+		}
+	};
+
+	const handleRecordToggle = () => {
+		if (!recording) {
+			handleSpeechRecognition();
+		}
 		setRecording(!recording);
 	};
 
@@ -46,7 +79,7 @@ const TextBox = ({
 					</div>
 
 					<div
-						onClick={handleRecord}
+						onClick={handleRecordToggle}
 						className={`icon-button microphone ${recording ? "microphone-rec" : ""}`}
 					>
 						<Microphone />
