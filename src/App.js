@@ -54,6 +54,7 @@ const App = () => {
 			<TextBox
 				type="input"
 				className="input"
+				loading={translateLoading}
 				selectedLanguage={inputLanguage}
 				setTextToTranslate={setTextToTranslate}
 				textToTranslate={textToTranslate}
@@ -64,6 +65,7 @@ const App = () => {
 			</div>
 			<TextBox
 				type="output"
+				loading={translateLoading}
 				selectedLanguage={outputLanguage}
 				translatedText={!translateLoading ? translatedText : inputLanguage.loading}
 			/>

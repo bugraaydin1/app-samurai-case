@@ -104,20 +104,7 @@ textarea {
 
 .input {
 	.icon-button {
-		@extend .clickable;
-		position: relative;
-		width: max-content;
-		height: max-content;
-		padding: 0 6px;
-		font-size: 2.5 * $font-size;
-		color: $light-gray;
-
-		svg {
-			fill: $dark-gray;
-			&:hover {
-				fill: $light-gray;
-			}
-		}
+		@extend .in-out-icon-button;
 	}
 
 	.delete {
@@ -143,6 +130,39 @@ textarea {
 			&:hover {
 				fill: $background-color;
 			}
+		}
+	}
+
+	.speaker {
+		left: 60px;
+		top: -131px;
+	}
+}
+
+.output {
+	.icon-button {
+		@extend .in-out-icon-button;
+	}
+
+	.speaker {
+		left: 10px;
+		top: -55px;
+	}
+}
+
+.in-out-icon-button {
+	@extend .clickable;
+	position: relative;
+	width: max-content;
+	height: max-content;
+	padding: 0 6px;
+	font-size: 2.5 * $font-size;
+	color: $light-gray;
+
+	svg {
+		fill: $dark-gray;
+		&:hover {
+			fill: $light-gray;
 		}
 	}
 }

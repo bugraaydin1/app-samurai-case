@@ -1,10 +1,12 @@
 import { useState } from "react";
 import LabelBox from "./LabelBox";
 import Microphone from "./svg/Microphone";
+import Speaker from "./svg/Speaker";
 import { languages } from "../data/languages";
 
 const TextBox = ({
 	type,
+	loading,
 	setShowModal,
 	selectedLanguage,
 	setTextToTranslate,
@@ -13,6 +15,8 @@ const TextBox = ({
 	setTranslatedText,
 }) => {
 	const [recording, setRecording] = useState(false);
+
+	const voices = speechSynthesis?.getVoices();
 
 	const handleClick = () => {
 		setTextToTranslate("");
@@ -23,7 +27,7 @@ const TextBox = ({
 		const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
 		if (SpeechRecognition !== undefined) {
-			let recognition = new SpeechRecognition();
+			const recognition = new SpeechRecognition();
 
 			recognition.continuous = false;
 			recognition.lang = selectedLanguage.code;
@@ -33,8 +37,8 @@ const TextBox = ({
 			recognition.start();
 
 			recognition.onspeechend = () => {
-				setRecording(false);
 				recognition.stop();
+				setRecording(false);
 			};
 
 			recognition.onresult = (result) => {
@@ -44,6 +48,9 @@ const TextBox = ({
 				console.log(`${accuracy}% accurate: ${resolved.transcript}`);
 
 				setTextToTranslate(resolved.transcript.toLowerCase());
+
+				// for mac safari to stop rec.
+				recognition.stop();
 			};
 		} else {
 			console.warn("Speech recognition is not supported ❎");
@@ -55,6 +62,25 @@ const TextBox = ({
 			handleSpeechRecognition();
 		}
 		setRecording(!recording);
+	};
+
+	const handleTextToSpeech = (type) => {
+		if (type === "output" ? !translatedText : !textToTranslate) return;
+
+		if (window.speechSynthesis !== undefined) {
+			const utterance = new SpeechSynthesisUtterance();
+
+			utterance.volume = 0.5;
+			utterance.rate = 1;
+			utterance.pitch = 1;
+			utterance.lang = selectedLanguage.code;
+			utterance.voice = voices.find((voice) => voice.lang.startsWith(selectedLanguage.code));
+			utterance.text = type === "output" ? translatedText : textToTranslate;
+
+			!loading && speechSynthesis.speak(utterance);
+		} else {
+			console.warn("Text To Speech is not supported ❎");
+		}
 	};
 
 	const getPlaceholderText = () => {
@@ -84,7 +110,17 @@ const TextBox = ({
 					>
 						<Microphone />
 					</div>
+
+					<div onClick={handleTextToSpeech} className={"icon-button speaker"}>
+						<Speaker />
+					</div>
 				</>
+			)}
+
+			{type === "output" && (
+				<div onClick={() => handleTextToSpeech("output")} className={"icon-button speaker"}>
+					<Speaker />
+				</div>
 			)}
 		</div>
 	);
