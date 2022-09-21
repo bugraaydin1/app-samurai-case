@@ -1,26 +1,35 @@
 import { useState } from "react";
 import LabelBox from "./LabelBox";
-import Microphone from "./svg/Microphone";
 import Speaker from "./svg/Speaker";
+import History from "./svg/History";
+import Microphone from "./svg/Microphone";
+import { speakTTS } from "../utils/audio";
 import { languages } from "../data/languages";
 
 const TextBox = ({
 	type,
 	loading,
-	setShowModal,
 	selectedLanguage,
 	setTextToTranslate,
 	textToTranslate,
 	translatedText,
 	setTranslatedText,
+	onShowHistory,
 }) => {
 	const [recording, setRecording] = useState(false);
 
-	const voices = speechSynthesis?.getVoices();
+	const text = type === "output" ? translatedText : textToTranslate;
 
-	const handleClick = () => {
+	const handleDelete = () => {
 		setTextToTranslate("");
 		setTranslatedText("");
+	};
+
+	const handleRecordToggle = () => {
+		if (!recording) {
+			handleSpeechRecognition();
+		}
+		setRecording(!recording);
 	};
 
 	const handleSpeechRecognition = () => {
@@ -57,30 +66,8 @@ const TextBox = ({
 		}
 	};
 
-	const handleRecordToggle = () => {
-		if (!recording) {
-			handleSpeechRecognition();
-		}
-		setRecording(!recording);
-	};
-
-	const handleTextToSpeech = (type) => {
-		if (type === "output" ? !translatedText : !textToTranslate) return;
-
-		if (window.speechSynthesis !== undefined) {
-			const utterance = new SpeechSynthesisUtterance();
-
-			utterance.volume = 0.5;
-			utterance.rate = 1;
-			utterance.pitch = 1;
-			utterance.lang = selectedLanguage.code;
-			utterance.voice = voices.find((voice) => voice.lang.startsWith(selectedLanguage.code));
-			utterance.text = type === "output" ? translatedText : textToTranslate;
-
-			!loading && speechSynthesis.speak(utterance);
-		} else {
-			console.warn("Text To Speech is not supported ❎");
-		}
+	const handleTextToSpeech = () => {
+		speakTTS(text, selectedLanguage.code, loading);
 	};
 
 	const getPlaceholderText = () => {
@@ -99,26 +86,27 @@ const TextBox = ({
 				value={type === "input" ? textToTranslate : translatedText}
 			/>
 			{type === "input" && (
-				<>
-					<div className="icon-button delete" onClick={handleClick}>
+				<div className="action-buttons">
+					<div className="icon-button delete" onClick={handleDelete}>
 						˟
 					</div>
-
 					<div
 						onClick={handleRecordToggle}
 						className={`icon-button microphone ${recording ? "microphone-rec" : ""}`}
 					>
 						<Microphone />
 					</div>
-
-					<div onClick={handleTextToSpeech} className={"icon-button speaker"}>
+					<div className={"icon-button speaker"} onClick={handleTextToSpeech}>
 						<Speaker />
 					</div>
-				</>
+					<div onClick={onShowHistory} className={"icon-button history"}>
+						<History />
+					</div>
+				</div>
 			)}
 
 			{type === "output" && (
-				<div onClick={() => handleTextToSpeech("output")} className={"icon-button speaker"}>
+				<div className={"icon-button speaker"} onClick={handleTextToSpeech}>
 					<Speaker />
 				</div>
 			)}
