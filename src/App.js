@@ -4,6 +4,7 @@ import axios from "./data/api/axios";
 import TextBox from "./components/TextBox";
 import Arrows from "./components/svg/Arrows";
 import { languages } from "./data/languages";
+import HistoryBox from "./components/HistoryBox";
 
 const App = () => {
 	const [inputLanguage, setInputLanguage] = useState(languages[0]);
@@ -11,8 +12,25 @@ const App = () => {
 	const [textToTranslate, setTextToTranslate] = useState("");
 	const [translatedText, setTranslatedText] = useState("");
 	const [translateLoading, setTranslateLoading] = useState(false);
+	const [showHistory, setShowHistory] = useState(false);
 
 	const debounceTime = 800;
+
+	const saveToHistory = useCallback(
+		(textToTranslate, translate) => {
+			let history = JSON.parse(localStorage.getItem(`${inputLanguage.code}`) ?? "[]");
+
+			const isAlreadyInHistory = history.some((obj) => obj.source === textToTranslate);
+
+			if (!isAlreadyInHistory) {
+				localStorage.setItem(
+					`${inputLanguage.code}`,
+					JSON.stringify([...history, { source: textToTranslate, target: translate }])
+				);
+			}
+		},
+		[inputLanguage.code]
+	);
 
 	const translate = useCallback(async () => {
 		setTranslateLoading(true);
@@ -24,10 +42,12 @@ const App = () => {
 		};
 
 		const response = await axios.post("/translate", data);
+		const translate = response.data.translatedText?.toLowerCase();
 
-		setTranslatedText(response.data.translatedText?.toLowerCase());
+		setTranslatedText(translate);
+		saveToHistory(textToTranslate, translate);
 		setTranslateLoading(false);
-	}, [textToTranslate, inputLanguage.code, outputLanguage.code]);
+	}, [textToTranslate, inputLanguage.code, outputLanguage.code, saveToHistory]);
 
 	useEffect(() => {
 		let translateTimer;
@@ -42,7 +62,7 @@ const App = () => {
 		};
 	}, [textToTranslate, translate]);
 
-	const handleClick = () => {
+	const handleToggleLanguages = () => {
 		setTextToTranslate(translatedText);
 		setTranslatedText(textToTranslate);
 		setInputLanguage(outputLanguage);
@@ -51,24 +71,29 @@ const App = () => {
 
 	return (
 		<div className="app">
-			<TextBox
-				type="input"
-				className="input"
-				loading={translateLoading}
-				selectedLanguage={inputLanguage}
-				setTextToTranslate={setTextToTranslate}
-				textToTranslate={textToTranslate}
-				setTranslatedText={setTranslatedText}
-			/>
-			<div className="arrow-container" onClick={handleClick}>
-				<Arrows />
+			<div className="flex">
+				<TextBox
+					type="input"
+					className="input"
+					loading={translateLoading}
+					selectedLanguage={inputLanguage}
+					setTextToTranslate={setTextToTranslate}
+					textToTranslate={textToTranslate}
+					setTranslatedText={setTranslatedText}
+					onShowHistory={() => setShowHistory(!showHistory)}
+				/>
+				<div className="arrow-container" onClick={handleToggleLanguages}>
+					<Arrows />
+				</div>
+				<TextBox
+					type="output"
+					loading={translateLoading}
+					selectedLanguage={outputLanguage}
+					translatedText={!translateLoading ? translatedText : inputLanguage.loading}
+				/>
 			</div>
-			<TextBox
-				type="output"
-				loading={translateLoading}
-				selectedLanguage={outputLanguage}
-				translatedText={!translateLoading ? translatedText : inputLanguage.loading}
-			/>
+
+			{showHistory && <HistoryBox selectedLanguage={inputLanguage} />}
 		</div>
 	);
 };

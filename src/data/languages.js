@@ -5,6 +5,9 @@ export const languages = [
 		enterText: "Enter text",
 		translation: "Translation",
 		loading: "Translating...",
+		noHistory: "History not found",
+		history: "Translation History",
+		flag: "🇬🇧",
 	},
 	{
 		title: "Türkçe",
@@ -12,5 +15,8 @@ export const languages = [
 		enterText: "Metin giriniz",
 		translation: "Çeviri",
 		loading: "Çeviri Yapılıyor...",
+		noHistory: "Geçmiş arama bulunamadı",
+		history: "Çeviri Geçmişi",
+		flag: "🇹🇷",
 	},
 ];
