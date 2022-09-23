@@ -1,8 +1,8 @@
 import { useState } from "react";
 import LabelBox from "./LabelBox";
-import Speaker from "./svg/Speaker";
-import History from "./svg/History";
-import Microphone from "./svg/Microphone";
+import Speaker from "./svgComponents/Speaker";
+import History from "./svgComponents/History";
+import Microphone from "./svgComponents/Microphone";
 import { speakTTS } from "../utils/audio";
 import { languages } from "../data/languages";
 import { Language } from "../data/models/language";
@@ -93,22 +93,31 @@ const TextBox = ({
 						˟
 					</div>
 					<div
+						data-testid="microphone-icon"
 						onClick={handleRecordToggle}
 						className={`icon-button microphone ${recording ? "microphone-rec" : ""}`}
 					>
 						<Microphone />
 					</div>
-					<div className={"icon-button speaker"} onClick={handleTextToSpeech}>
+					<div
+						data-testid="speaker-icon"
+						className={"icon-button speaker"}
+						onClick={handleTextToSpeech}
+					>
 						<Speaker />
 					</div>
-					<div onClick={onShowHistory} className={"icon-button history"}>
+					<div data-testid="history-icon" onClick={onShowHistory} className={"icon-button history"}>
 						<History />
 					</div>
 				</div>
 			)}
 
 			{type === "output" && (
-				<div className={"icon-button speaker"} onClick={handleTextToSpeech}>
+				<div
+					data-testid="speaker-icon"
+					className={"icon-button speaker"}
+					onClick={handleTextToSpeech}
+				>
 					<Speaker />
 				</div>
 			)}

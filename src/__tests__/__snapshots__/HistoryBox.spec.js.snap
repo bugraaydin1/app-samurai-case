@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HistoryBox renders correctly 1`] = `
+<div
+  className="history-wrapper"
+  data-testid="history-wrapper"
+>
+  <h6
+    className="sticky-title"
+  >
+    🇬🇧
+     
+    Translation History
+  </h6>
+  <div>
+    History not found
+  </div>
+</div>
+`;

@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LabelBox renders correctly 1`] = `
+<div
+  className="label-box"
+>
+  <input
+    readOnly={true}
+    value="English"
+  />
+</div>
+`;

@@ -64,6 +64,10 @@ const App = () => {
 	]);
 
 	useEffect(() => {
+		handleStorageHistory();
+	}, []);
+
+	useEffect(() => {
 		let translateTimer;
 		if (textToTranslate) {
 			translateTimer = setTimeout(() => {
@@ -96,7 +100,11 @@ const App = () => {
 					setTranslatedText={setTranslatedText}
 					onShowHistory={() => setShowHistory(!showHistory)}
 				/>
-				<div className="arrow-container" onClick={handleToggleLanguages}>
+				<div
+					data-testid="arrow-container"
+					className="arrow-container"
+					onClick={handleToggleLanguages}
+				>
 					<Arrows />
 				</div>
 				<TextBox

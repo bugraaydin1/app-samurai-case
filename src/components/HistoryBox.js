@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 
 const HistoryBox = ({ history, loading, selectedLanguage }) => {
 	return (
-		<div className="history-wrapper">
+		<div data-testid="history-wrapper" className="history-wrapper">
 			<h6 className="sticky-title">
 				{selectedLanguage.flag} {selectedLanguage.history}
 			</h6>
