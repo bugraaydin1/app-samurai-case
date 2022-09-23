@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
-import axios from "./data/api/axios";
+import axios from "./config/axios";
 
 import TextBox from "./components/TextBox";
-import Arrows from "./components/svg/Arrows";
-import { languages } from "./data/languages";
 import HistoryBox from "./components/HistoryBox";
+import Arrows from "./components/svgComponents/Arrows";
+import { languages } from "./data/languages";
 
 const App = () => {
 	const [inputLanguage, setInputLanguage] = useState(languages[0]);
@@ -12,7 +12,9 @@ const App = () => {
 	const [textToTranslate, setTextToTranslate] = useState("");
 	const [translatedText, setTranslatedText] = useState("");
 	const [translateLoading, setTranslateLoading] = useState(false);
+
 	const [showHistory, setShowHistory] = useState(false);
+	const [history, setHistory] = useState([]);
 
 	const debounceTime = 800;
 
@@ -32,6 +34,11 @@ const App = () => {
 		[inputLanguage.code]
 	);
 
+	const handleStorageHistory = useCallback(() => {
+		const storageHistory = JSON.parse(localStorage.getItem(`${inputLanguage.code}`) ?? "[]");
+		setHistory(storageHistory);
+	}, [inputLanguage.code]);
+
 	const translate = useCallback(async () => {
 		setTranslateLoading(true);
 
@@ -46,8 +53,15 @@ const App = () => {
 
 		setTranslatedText(translate);
 		saveToHistory(textToTranslate, translate);
+		handleStorageHistory();
 		setTranslateLoading(false);
-	}, [textToTranslate, inputLanguage.code, outputLanguage.code, saveToHistory]);
+	}, [
+		textToTranslate,
+		inputLanguage.code,
+		outputLanguage.code,
+		handleStorageHistory,
+		saveToHistory,
+	]);
 
 	useEffect(() => {
 		let translateTimer;
@@ -93,7 +107,9 @@ const App = () => {
 				/>
 			</div>
 
-			{showHistory && <HistoryBox selectedLanguage={inputLanguage} />}
+			{showHistory && (
+				<HistoryBox loading={translateLoading} history={history} selectedLanguage={inputLanguage} />
+			)}
 		</div>
 	);
 };
