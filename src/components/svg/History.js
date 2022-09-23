@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 const History = ({ color }) => {
 	return (
 		<svg width="25" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -10,3 +12,7 @@ const History = ({ color }) => {
 };
 
 export default History;
+
+History.propTypes = {
+	color: PropTypes.string,
+};

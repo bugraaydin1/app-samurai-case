@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 const Arrows = ({ color }) => {
 	return (
 		<svg fill={color} focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -10,3 +12,7 @@ const Arrows = ({ color }) => {
 };
 
 export default Arrows;
+
+Arrows.propTypes = {
+	color: PropTypes.string,
+};

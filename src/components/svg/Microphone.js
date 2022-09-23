@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 const Microphone = ({ color }) => {
 	return (
 		<svg
@@ -20,3 +22,7 @@ const Microphone = ({ color }) => {
 };
 
 export default Microphone;
+
+Microphone.propTypes = {
+	color: PropTypes.string,
+};

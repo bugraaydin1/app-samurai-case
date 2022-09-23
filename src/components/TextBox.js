@@ -5,6 +5,8 @@ import History from "./svg/History";
 import Microphone from "./svg/Microphone";
 import { speakTTS } from "../utils/audio";
 import { languages } from "../data/languages";
+import { Language } from "../data/models/language";
+import PropTypes from "prop-types";
 
 const TextBox = ({
 	type,
@@ -115,3 +117,25 @@ const TextBox = ({
 };
 
 export default TextBox;
+
+TextBox.propTypes = {
+	type: PropTypes.string.isRequired,
+	loading: PropTypes.bool.isRequired,
+	selectedLanguage: Language.isRequired,
+	setTextToTranslate: PropTypes.func,
+	textToTranslate: PropTypes.string,
+	translatedText: PropTypes.string,
+	setTranslatedText: PropTypes.func,
+	onShowHistory: PropTypes.func,
+};
+
+TextBox.defaultProps = {
+	type: "input",
+	loading: false,
+	selectedLanguage: languages[0],
+	setTextToTranslate: () => {},
+	textToTranslate: "",
+	translatedText: "",
+	setTranslatedText: () => {},
+	onShowHistory: () => {},
+};

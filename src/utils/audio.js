@@ -1,3 +1,10 @@
+/**
+ * Speaks supplied text
+ * @param {string} text
+ * @param {string} languageCode
+ * @param {boolean=} loading
+ */
+
 export const speakTTS = (text, languageCode, loading) => {
 	const voices = speechSynthesis?.getVoices();
 

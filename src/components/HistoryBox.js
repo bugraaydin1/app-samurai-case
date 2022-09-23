@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { speakTTS } from "../utils/audio";
+import { Language } from "../data/models/language";
 import Speaker from "./svg/Speaker";
+import { languages } from "../data/languages";
 
 const HistoryBox = ({ selectedLanguage }) => {
-	const [history, setHistory] = useState([{ source: "car", target: "home" }]);
+	const [history, setHistory] = useState([]);
 
 	const getStorageHistory = () => {
 		return JSON.parse(localStorage.getItem(`${selectedLanguage.code}`) ?? "[]");
@@ -41,3 +43,11 @@ const HistoryBox = ({ selectedLanguage }) => {
 };
 
 export default HistoryBox;
+
+HistoryBox.propTypes = {
+	selectedLanguage: Language.isRequired,
+};
+
+HistoryBox.defaultProps = {
+	selectedLanguage: languages[0],
+};

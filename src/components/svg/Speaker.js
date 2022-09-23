@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 const Speaker = ({ color, size }) => {
 	return (
 		<svg
@@ -16,3 +18,8 @@ const Speaker = ({ color, size }) => {
 };
 
 export default Speaker;
+
+Speaker.propTypes = {
+	color: PropTypes.string,
+	size: PropTypes.string,
+};
